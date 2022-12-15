@@ -11,6 +11,7 @@ from "Concerts"."Halls"
 where extract(MONTH FROM "Concerts"."Receipts"."R_Date")=7 and "Concerts"."Halls"."Hall_Id"=1
 group by "Concerts"."Halls"."Hall_Id";
 
+
 2. Топ успешных продюсеров (по количеству организованных концертов)
 
 Select "Concerts"."Producers"."P_Title",
