@@ -116,12 +116,7 @@ CREATE TABLE IF NOT EXISTS "Concerts"."Receipt_Items"
     "Ticket_Id" bigint NOT NULL,
     "RI_Quantity" bigint NOT NULL,
     "RI_Price" money NOT NULL,
-    CONSTRAINT "RI_Id" PRIMARY KEY ("RI_Id"),
-    CONSTRAINT "Receipt_Id" FOREIGN KEY ("Receipt_Id")
-        REFERENCES "Concerts"."Receipts" ("Receipt_Id") MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
+    CONSTRAINT "Receipt_Id" PRIMARY KEY ("Receipt_Id"),
     CONSTRAINT "Ticket_Id" FOREIGN KEY ("Ticket_Id")
         REFERENCES "Concerts"."Tickets" ("Ticket_Id") MATCH SIMPLE
         ON UPDATE NO ACTION
