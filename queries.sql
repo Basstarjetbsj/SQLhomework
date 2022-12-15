@@ -4,10 +4,10 @@ Select "Concerts"."Halls"."H_Title",
 	'July' as During_Month, 
 	sum("Concerts"."Receipt_Items"."RI_Quantity" * "Concerts"."Receipt_Items"."RI_Price") as Month_Amount
 from "Concerts"."Halls" 
-	natural join "Concerts"."Concerts" 
-	natural join "Concerts"."Tickets"
-	natural join "Concerts"."Receipt_Items"
-	natural join "Concerts"."Receipts"
+	inner join "Concerts"."Concerts" ON "Concerts"."Halls"."Hall_Id"="Concerts"."Concerts"."Hall_Id" 
+	inner join "Concerts"."Tickets" ON "Concerts"."Concerts"."Concert_Id"="Concerts"."Tickets"."Concert_Id" 
+	inner join "Concerts"."Receipt_Items" ON "Concerts"."Tickets"."Ticket_Id"="Concerts"."Receipt_Items"."Ticket_Id"
+	inner join "Concerts"."Receipts" ON "Concerts"."Receipt_Items"."Receipt_Id"="Concerts"."Receipts"."Receipt_Id"
 where extract(MONTH FROM "Concerts"."Receipts"."R_Date")=7 and "Concerts"."Halls"."Hall_Id"=1
 group by "Concerts"."Halls"."Hall_Id";
 
@@ -17,7 +17,7 @@ group by "Concerts"."Halls"."Hall_Id";
 Select "Concerts"."Producers"."P_Title",
 		count("Concerts"."Concerts"."Concert_Id") as Number_of_Concerts
 from "Concerts"."Producers"
-	natural join "Concerts"."Concerts"
+	inner join "Concerts"."Concerts" ON "Concerts"."Producers"."Producer_Id"="Concerts"."Concerts"."Producer_Id" 
 group by "Concerts"."Producers"."P_Title"
 order by count("Concerts"."Concerts"."Concert_Id") Desc
 limit 5;
@@ -25,10 +25,11 @@ limit 5;
 3. Топ успешных продюсеров (по количеству собранных денег)
 Select "Concerts"."Producers"."P_Title", 
 	sum("Concerts"."Receipt_Items"."RI_Quantity" * "Concerts"."Receipt_Items"."RI_Price") as Profit
-from "Concerts"."Producers" natural join "Concerts"."Concerts" 
-	natural join "Concerts"."Tickets"
-	natural join "Concerts"."Receipt_Items"
-	natural join "Concerts"."Receipts"
+from "Concerts"."Producers" 
+    inner join "Concerts"."Concerts" ON "Concerts"."Producers"."Producer_Id"="Concerts"."Concerts"."Producer_Id" 
+	inner join "Concerts"."Tickets" ON "Concerts"."Concerts"."Concert_Id"="Concerts"."Tickets"."Concert_Id" 
+	inner join "Concerts"."Receipt_Items" ON "Concerts"."Tickets"."Ticket_Id"="Concerts"."Receipt_Items"."Ticket_Id"
+	inner join "Concerts"."Receipts" ON "Concerts"."Receipt_Items"."Receipt_Id"="Concerts"."Receipts"."Receipt_Id"
 group by "Concerts"."Producers"."Producer_Id"
 order by Profit desc
 limit 5;
@@ -52,3 +53,7 @@ FROM "Concerts"."Artists"
 GROUP BY "Concerts"."Artists"."A_Name"
 ORDER BY Number_of_Concerts DESC
 LIMIT 5;
+
+
+--Топ 5 концертов на которые возвращали билеты/ Концерт на котором было заполнено больше всего мест/ Сколько билетов покупается в день на самый дорогой концерт 
+--со дня старта продаж/ Артисты которые играют больше чем три концерта
