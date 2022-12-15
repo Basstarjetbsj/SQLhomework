@@ -1,3 +1,4 @@
-# Иллюстрация![drawSQL-export-2022-12-15_12_14](https://user-images.githubusercontent.com/95749928/207820166-3332486c-24ad-4321-92ce-2a8b28260d89.png)
+# Иллюстрация![drawSQL-export-2022-12-15_17_22](https://user-images.githubusercontent.com/95749928/207885210-5c295ac2-cb21-4000-a90e-e75664c2e6ea.png)
+
 
 
