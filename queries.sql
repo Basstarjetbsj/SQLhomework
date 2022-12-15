@@ -55,6 +55,35 @@ GROUP BY "Concerts"."Artists"."A_Name"
 ORDER BY Number_of_Concerts DESC
 LIMIT 5;
 
+6. Топ 5 концертов, на которые возвращали билеты
 
---Топ 5 концертов на которые возвращали билеты/ Концерт на котором было заполнено больше всего мест/ Сколько билетов покупается в день на самый дорогой концерт 
---со дня старта продаж/ Артисты которые играют больше чем три концерта
+SELECT "Concerts"."Tickets"."Concert_Id" AS Concert, 
+	SUM("Concerts"."Refund"."RF_Quantity") AS  Returned_Tickets
+FROM "Concerts"."Tickets"
+	INNER JOIN "Concerts"."Refund" ON "Concerts"."Tickets"."Ticket_Id"="Concerts"."Refund"."Ticket_Id"
+GROUP BY "Concerts"."Tickets"."Concert_Id"
+ORDER BY Returned_Tickets DESC
+LIMIT 5;
+
+7. Концерт, на котором было заполнено больше всего мест
+
+SELECT "Concerts"."Tickets"."Concert_Id" AS Concert, 
+	SUM("Concerts"."Seats"."S_Quantity_Max" - "Concerts"."Tickets"."T_Remaining_Seats") AS Buzy_Seats
+FROM "Concerts"."Tickets" 
+	INNER JOIN "Concerts"."Seats" ON "Concerts"."Tickets"."Seat_Id"="Concerts"."Seats"."Seat_Id" 
+GROUP BY "Concerts"."Tickets"."Concert_Id"
+--having sum("Concerts"."Receipt_Items"."RI_Quantity" * "Concerts"."Receipt_Items"."RI_Price") > money(300000)
+ORDER BY Buzy_Seats DESC
+LIMIT 1;
+
+8.Артисты, которые играют больше, чем три концерта
+
+SELECT "Concerts"."Artists"."A_Name" AS Artists,
+	COUNT("Concerts"."Concerts"."Concert_Id") AS Number_of_Concerts
+FROM "Concerts"."Artists"
+	INNER JOIN "Concerts"."Concerts" ON "Concerts"."Artists"."Artist_Id"="Concerts"."Concerts"."Artist_Id"
+GROUP BY "Concerts"."Artists"."A_Name"
+HAVING COUNT("Concerts"."Concerts"."Concert_Id") > 3
+ORDER BY Number_of_Concerts DESC;
+
+
