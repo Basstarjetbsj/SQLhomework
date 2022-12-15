@@ -38,10 +38,11 @@ limit 5;
 SELECT "Concerts"."Producers"."P_Title", 
 	SUM("Concerts"."Refund"."RF_Quantity" * "Concerts"."Tickets"."T_Price") AS Anti_Profit,
 	SUM("Concerts"."Refund"."RF_Quantity") AS Num_of_tickets
-FROM "Concerts"."Producers" NATURAL JOIN "Concerts"."Concerts" 
-	NATURAL JOIN "Concerts"."Tickets"
-	NATURAL JOIN "Concerts"."Refund"
-		 
+FROM "Concerts"."Producers" 
+    INNER JOIN "Concerts"."Concerts" ON "Concerts"."Producers"."Producer_Id"="Concerts"."Concerts"."Producer_Id"   
+	INNER JOIN "Concerts"."Tickets" ON "Concerts"."Concerts"."Concert_Id"="Concerts"."Tickets"."Concert_Id" 
+	INNER JOIN "Concerts"."Refund" ON "Concerts"."Tickets"."Ticket_Id"="Concerts"."Refund"."Ticket_Id"
+		  
 GROUP BY "Concerts"."Producers"."Producer_Id"
 ORDER BY Num_of_tickets DESC;
 
@@ -49,7 +50,7 @@ ORDER BY Num_of_tickets DESC;
 SELECT "Concerts"."Artists"."A_Name",
 	COUNT("Concerts"."Concerts"."Concert_Id") AS Number_of_Concerts
 FROM "Concerts"."Artists"
-	NATURAL JOIN "Concerts"."Concerts"
+	INNER JOIN "Concerts"."Concerts" ON "Concerts"."Artists"."Artist_Id"="Concerts"."Concerts"."Artist_Id" 
 GROUP BY "Concerts"."Artists"."A_Name"
 ORDER BY Number_of_Concerts DESC
 LIMIT 5;
