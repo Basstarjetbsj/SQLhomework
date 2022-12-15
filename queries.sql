@@ -42,3 +42,12 @@ FROM "Concerts"."Producers" NATURAL JOIN "Concerts"."Concerts"
 		 
 GROUP BY "Concerts"."Producers"."Producer_Id"
 ORDER BY Num_of_tickets DESC;
+
+5. Какие исполнители дали больше всего концертов
+SELECT "Concerts"."Artists"."A_Name",
+	COUNT("Concerts"."Concerts"."Concert_Id") AS Number_of_Concerts
+FROM "Concerts"."Artists"
+	NATURAL JOIN "Concerts"."Concerts"
+GROUP BY "Concerts"."Artists"."A_Name"
+ORDER BY Number_of_Concerts DESC
+LIMIT 5;
