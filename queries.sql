@@ -86,4 +86,32 @@ GROUP BY "Concerts"."Artists"."A_Name"
 HAVING COUNT("Concerts"."Concerts"."Concert_Id") > 3
 ORDER BY Number_of_Concerts DESC;
 
+9. Сколько билетов покупается в день в среднем на самый дорогой концерт.
+-- Cчитаем, что продажи начинаются за 180 дней до концерта.
+
+SELECT  "Concerts"."Concerts"."Concert_Id" AS Concert_Code,
+		"Concerts"."Artists"."A_Name" AS Artist, 
+		"Concerts"."Halls"."H_Title" AS Hall,
+		"Concerts"."Concerts"."C_Date" AS Concert_Date,
+		(SELECT 
+				SUM(("Concerts"."Seats"."S_Quantity_Max" - "Concerts"."Tickets"."T_Remaining_Seats")/180.0) 
+		FROM "Concerts"."Tickets" 
+				INNER JOIN "Concerts"."Seats" ON "Concerts"."Tickets"."Seat_Id"="Concerts"."Seats"."Seat_Id" 
+		GROUP BY "Concerts"."Tickets"."Concert_Id"
+		having "Concerts"."Tickets"."Concert_Id"=
+				(SELECT "Concerts"."Tickets"."Concert_Id"
+					FROM "Concerts"."Tickets"
+					GROUP BY "Concerts"."Tickets"."Concert_Id"
+					ORDER BY MAX("Concerts"."Tickets"."T_Price") DESC
+					LIMIT 1)) AS Seats_Sold_per_Day
+FROM "Concerts"."Concerts" 
+				INNER JOIN "Concerts"."Artists" ON "Concerts"."Concerts"."Artist_Id"="Concerts"."Artists"."Artist_Id"
+				INNER JOIN "Concerts"."Halls" ON "Concerts"."Concerts"."Hall_Id"="Concerts"."Halls"."Hall_Id"
+WHERE "Concerts"."Concerts"."Concert_Id"=
+		 		(SELECT "Concerts"."Tickets"."Concert_Id"
+					FROM "Concerts"."Tickets"
+					GROUP BY "Concerts"."Tickets"."Concert_Id"
+					ORDER BY MAX("Concerts"."Tickets"."T_Price") DESC
+					LIMIT 1);
+
 
